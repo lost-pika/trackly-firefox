@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trackly</title>
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="app-sidebar">
+      <div class="brand">
+        <div class="logo-icon"><i data-lucide="clock"></i></div>
+        <h1>Trackly</h1>
+      </div>
+
+      <nav class="nav-menu">
+        <button id="nav-dashboard" class="nav-item active">
+          <i data-lucide="layout-dashboard" width="18"></i>
+          <span>Dashboard</span>
+        </button>
+        <button id="nav-summary" class="nav-item">
+          <i data-lucide="bar-chart-2" width="18"></i>
+          <span>Summary</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <!-- VIEW: WELCOME -->
+      <div id="view-welcome" class="view-container hidden">
+        <div class="welcome-hero fade-in">
+          <div class="welcome-logo">
+            <div class="logo-icon welcome-icon">
+              <i data-lucide="clock" style="width: 32px; height: 32px"></i>
+            </div>
+          </div>
+
+          <h1 class="welcome-title">Welcome to Trackly</h1>
+
+          <p class="welcome-subtitle">
+            A lightweight time tracker for tasks and websites — built to help
+            you stay intentional with your day.
+          </p>
+
+          <div class="welcome-highlights">
+            <div class="welcome-item">
+              <i data-lucide="globe"></i>
+              <div>
+                <h4>Automatic website tracking</h4>
+                <p>Track how much time you spend on each site automatically.</p>
+              </div>
+            </div>
+
+            <div class="welcome-item">
+              <i data-lucide="play-circle"></i>
+              <div>
+                <h4>Manual task sessions</h4>
+                <p>Start, pause and stop timers for focused work.</p>
+              </div>
+            </div>
+
+            <div class="welcome-item">
+              <i data-lucide="bar-chart-2"></i>
+              <div>
+                <h4>Weekly & monthly insights</h4>
+                <p>See top tasks, top websites and active days.</p>
+              </div>
+            </div>
+
+            <div class="welcome-item">
+              <i data-lucide="download"></i>
+              <div>
+                <h4>Export your data</h4>
+                <p>Download your history anytime as CSV.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="welcome-cta">
+            <button id="btn-onboard" class="btn-large-cta">
+              Start using Trackly
+            </button>
+            <div class="welcome-note">
+              No account. No setup. Everything stays on your device.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: DASHBOARD -->
+      <div id="view-dashboard" class="view-container hidden fade-in">
+        <!-- Active Session Banner -->
+        <div class="active-session-banner">
+          <div style="display: flex; align-items: center; gap: 1rem">
+            <div
+              style="
+                background: rgba(255, 255, 255, 0.1);
+                padding: 10px;
+                border-radius: 50%;
+              "
+            >
+              <i data-lucide="activity" class="text-primary"></i>
+            </div>
+            <div>
+              <div
+                style="
+                  font-size: 0.85rem;
+                  color: var(--text-muted);
+                  margin-bottom: 2px;
+                "
+              >
+                Active Task
+              </div>
+              <h2
+                id="active-task-label"
+                style="font-size: 1.5rem; font-weight: 600"
+              >
+                No active task
+              </h2>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 1rem">
+            <button
+              id="banner-pause-btn"
+              class="btn-secondary"
+              style="
+                padding: 0.5rem 1rem;
+                border-radius: 8px;
+                font-size: 0.85rem;
+              "
+            >
+              Start
+            </button>
+            <div class="timer-display-mini" id="main-timer">00:00:00</div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- Col 1: Overview & History -->
+          <div class="col-overview">
+            <div class="card">
+              <div class="card-header" style="margin-bottom: 1.5rem">
+                <h3>Today's Overview</h3>
+              </div>
+              <div class="stat-highlight">
+                <div>
+                  <div class="stat-label">Total Time</div>
+                  <div class="stat-value text-primary" id="dash-total-time">
+                    0m
+                  </div>
+                </div>
+                <div style="text-align: right">
+                  <div class="stat-label">Sessions</div>
+                  <div class="stat-value" id="dash-session-count">0</div>
+                </div>
+              </div>
+              <div
+                id="overview-most-used"
+                style="
+                  padding: 1rem;
+                  background: rgba(0, 0, 0, 0.2);
+                  border-radius: 8px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 8px;
+                "
+              >
+                <!-- Most used task -->
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    opacity: 0.5;
+                  "
+                  id="overview-most-task-row"
+                >
+                  <i data-lucide="star" style="color: #fbbf24; width: 16px"></i>
+                  <div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted)">
+                      Most used task
+                    </div>
+                    <div id="overview-top-task" style="font-weight: 600">
+                      No Data
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Most used website -->
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    opacity: 0.5;
+                  "
+                  id="overview-most-website-row"
+                >
+                  <i
+                    data-lucide="globe"
+                    style="color: #38bdf8; width: 16px"
+                  ></i>
+                  <div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted)">
+                      Most used website
+                    </div>
+                    <div id="overview-top-website" style="font-weight: 600">
+                      No Data
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card session-history-card">
+              <div
+                class="card-header"
+                style="
+                  margin-bottom: 1rem;
+                  display: flex;
+                  justify-content: space-between;
+                "
+              >
+                <h3>Session History</h3>
+                <span
+                  id="view-history-link"
+                  style="
+                    font-size: 0.75rem;
+                    color: var(--primary);
+                    cursor: pointer;
+                  "
+                  >View All</span
+                >
+              </div>
+              <div id="session-history-list">
+                <!-- JS Populated -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Col 2: Time Breakdown -->
+          <div class="col-breakdown">
+            <div class="card breakdown-card">
+              <div
+                class="card-header"
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 1rem;
+                "
+              >
+                <h3>Time Breakdown</h3>
+              </div>
+
+              <div class="tabs">
+                <div class="tab" id="tab-task">By Task</div>
+                <div class="tab active" id="tab-website">By Website</div>
+              </div>
+
+              <!-- Content: By Website -->
+              <div id="content-website" class="fade-in">
+                <!-- JS Populated -->
+              </div>
+
+              <!-- Content: By Task -->
+              <div id="content-task" class="hidden fade-in">
+                <input
+                  type="text"
+                  id="manual-task-input"
+                  class="dark-input"
+                  placeholder="+ Add Task Name"
+                />
+                <button
+                  id="btn-manual-start"
+                  class="action-btn btn-secondary"
+                  style="
+                    width: 100%;
+                    justify-content: center;
+                    margin-bottom: 1.5rem;
+                  "
+                >
+                  Start Timer
+                </button>
+
+                <div id="task-list-container">
+                  <!-- JS Populated -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Col 3: Quick Actions -->
+          <div class="col-actions">
+            <div class="card">
+              <h3 style="margin-bottom: 1rem">Quick Actions</h3>
+
+              <div style="display: flex; flex-direction: column; gap: 0.75rem">
+                <button
+                  id="qa-new-session"
+                  class="action-btn btn-start-session"
+                >
+                  <i data-lucide="plus"></i> Start New Session
+                </button>
+                <button id="qa-clear" class="action-btn btn-secondary">
+                  <i data-lucide="trash-2"></i> Clear Today's Data
+                </button>
+                <button id="qa-export" class="action-btn btn-secondary">
+                  <i data-lucide="download"></i> Export CSV
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: WEEKLY SUMMARY -->
+      <div id="view-summary" class="view-container hidden fade-in">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+          "
+        >
+          <div style="display: flex; align-items: center; gap: 10px">
+            <button id="back-to-dash" class="btn-icon-only">
+              <i data-lucide="arrow-left"></i>
+            </button>
+            <h2>Weekly Summary</h2>
+          </div>
+
+          <div class="filter-group">
+            <div
+              style="
+                font-size: 0.85rem;
+                color: var(--text-muted);
+                margin-right: 10px;
+              "
+            >
+              Filter:
+            </div>
+            <button class="filter-btn active" data-range="week">
+              Current Week
+            </button>
+            <button class="filter-btn" data-range="month">Month</button>
+          </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+          <div class="card stat-card-row">
+            <div class="stat-icon-bg blue">
+              <i data-lucide="pie-chart" width="20"></i>
+            </div>
+            <div>
+              <div class="stat-label">Total Time</div>
+              <div class="stat-big" id="sum-total-time">0h 0m</div>
+            </div>
+          </div>
+          <div class="card stat-card-row">
+            <div class="stat-icon-bg blue">
+              <i data-lucide="calendar" width="20"></i>
+            </div>
+            <div>
+              <div class="stat-label">Active Days</div>
+              <div class="stat-big" id="sum-active-days">0 Days</div>
+            </div>
+          </div>
+          <div class="card stat-card-row">
+            <div class="stat-icon-bg yellow">
+              <i data-lucide="star" width="20"></i>
+            </div>
+            <div>
+              <div class="stat-label">Most used task:</div>
+              <div class="stat-big" id="sum-top-task">No Data</div>
+            </div>
+          </div>
+          <div class="card stat-card-row">
+            <div class="stat-icon-bg blue">
+              <i data-lucide="globe" width="20"></i>
+            </div>
+            <div>
+              <div class="stat-label">Most used website:</div>
+              <div class="stat-big" id="sum-top-website">No Data</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: Charts & Top Lists -->
+        <div class="summary-middle-grid">
+          <!-- Left: Combined Tasks + Chart Card -->
+          <div class="card big-chart-card">
+            <div class="split-card-content">
+              <!-- Left Sub-column: Top Tasks List -->
+              <div class="tasks-sub-column">
+                <h3>Top Tasks</h3>
+                <div id="summary-tasks-list" class="styled-task-list">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+
+              <!-- Right Sub-column: Bar Chart -->
+              <div class="chart-sub-column">
+                <div id="activity-chart" class="chart-container">
+                  <!-- Bars -->
+                </div>
+                <div id="activity-labels" class="chart-labels">
+                  <!-- Labels -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Top Websites -->
+          <div class="card websites-card">
+            <div class="card-header"><h3>Top Websites</h3></div>
+            <div id="summary-website-list" class="styled-website-list">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3: Session History Table -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Session History</h3>
+          </div>
+          <div class="table-container">
+            <div class="table-header">
+              <div style="flex: 1.5">Date</div>
+              <div style="flex: 1.5">Time</div>
+              <div style="flex: 2">Task</div>
+              <div style="flex: 1">Duration</div>
+              <div style="flex: 0.5; text-align: right"></div>
+            </div>
+            <div id="detailed-history-body">
+              <!-- Rows -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="dashboard.js"></script>
+  </body>
+</html>
